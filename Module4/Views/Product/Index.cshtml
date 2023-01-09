@@ -1,0 +1,44 @@
+﻿@model Module4.Models.IndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @*dispalying propery name*@
+            <th>
+                @Html.DisplayNameFor(model => model.ProductList.First().ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductList.First().Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ProductList) {
+        <tr>
+            @*display propery value*@
+            <td>@Html.DisplayFor(modelitem=>item.ProductId)</td>
+            <td>@Html.DisplayFor(modelitem=>item.Name)</td>
+
+            <td>
+                @* 
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                *@
+                <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId">Details</a>
+                <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.ProductId">Edit</a>
+                <a asp-action="Delete" asp-controller="Product" asp-route-id="@item.ProductId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
