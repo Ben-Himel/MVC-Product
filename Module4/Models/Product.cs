@@ -17,7 +17,7 @@ namespace Module4.Models
 
         [Display(Name ="Discription")]
         public string? Description { get; set; } //c
-                                                 //
+                                                 
         [Display(Name ="Sale Price")]
         [DataType(DataType.Currency)]
         public double ProductPrice { get; set; } //d

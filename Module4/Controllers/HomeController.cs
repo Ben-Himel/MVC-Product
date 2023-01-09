@@ -73,6 +73,10 @@ namespace Module4.Controllers
 
         public IActionResult Privacy()
         {
+            
+            //TODO Remove Error test code
+            int x = 0, y = 50;
+            int result = y / x;
             return View();
         }
 
@@ -80,6 +84,11 @@ namespace Module4.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }
