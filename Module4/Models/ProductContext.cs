@@ -10,7 +10,7 @@ namespace Module4.Models
         }
         public DbSet<Product> Products { get; set;}
 
-        protected override void OnModelCreateing(ModelBuilder modelBuilder)
+        protected void OnModelCreateing(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasData(
                 new Product { ProductId = 1, Name = "Raspberry", ProductPrice = 123.44, Description = "how to make pies", ProductImageName = "bodie.jpg" },
