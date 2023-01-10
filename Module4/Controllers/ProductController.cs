@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Module4.Models;
 using Module4.Services;
@@ -16,6 +17,7 @@ namespace Module4.Controllers
             this.cRUD = cRUD;
         }
 
+        [Authorize(Roles = "Employee")]
         public IActionResult Index()
         {
             IndexViewModel model = new IndexViewModel();
@@ -23,6 +25,7 @@ namespace Module4.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Employee")]
         public IActionResult Details(int? id)
         {
             var prod = cRUD.GetProduct(id);
@@ -34,6 +37,7 @@ namespace Module4.Controllers
         }
 
         //get request
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var newprod = new Product();
@@ -75,6 +79,7 @@ namespace Module4.Controllers
         //    return View(prod);
         //}
 
+        [Authorize(Roles ="Admin")]
         public IActionResult Edit(int id)
         {
             var prod = cRUD.GetProduct(id);
@@ -92,6 +97,7 @@ namespace Module4.Controllers
             return View(prod);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int? id)
         {
             cRUD.DeleteProduct(id);

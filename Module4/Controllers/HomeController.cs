@@ -75,8 +75,8 @@ namespace Module4.Controllers
         {
             
             //TODO Remove Error test code
-            int x = 0, y = 50;
-            int result = y / x;
+            //int x = 0, y = 50;
+            //int result = y / x;
             return View();
         }
 

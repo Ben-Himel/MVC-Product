@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Module4.Models;
 using Module4.Services;
 
+
 namespace Module4
 {
     public class Program
@@ -16,7 +17,9 @@ namespace Module4
             //builder.Services.AddSingleton<ICRUD, ProductRepository>();
             builder.Services.AddScoped<ICRUD, CRUD>();
             builder.Services.AddScoped<IFileUpload, FileUpload>();
+            
             builder.Services.AddDbContext<ProductContext>(options => options.UseSqlServer("Server=localhost;Database=CCAD9Prod;Trusted_Connection=true;TrustServerCertificate=True; MultipleActiveResultSets=True"));
+            builder.Services.AddDbContext<ProductContext>(options => options.UseSqlServer());
             builder.Services.AddIdentity<User, IdentityRole>(Options =>
             {
                 Options.Lockout.MaxFailedAccessAttempts = 5;

@@ -1,96 +1,83 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Module4.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Module4.Models;
-using Module4.ViewModels;
-using Module4.Controllers;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Module4.Controllers
 {
     public class AccountController : Controller
     {
-        private SignInManager<User> _signInManager; //sign in user
-        private UserManager<User> _userManager; //crate user
-        public AccountController(SignInManager<User> signInManager, UserManager<User> userManger)
+        private SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
+        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager)
         {
             this._signInManager = signInManager;
-            this._userManager = userManger;
+            this._userManager = userManager;
         }
 
+        //get method
         public IActionResult Login()
         {
-            if (this.User.Identity.IsAuthenticated)
+            if(this.User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Employee");
+                return RedirectToAction("Index", "Product");
             }
-            return View();//reutn blank login view
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = await _signInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, loginViewModel.RememberMe, lockoutOnFailure:false);
-                if(result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Employee");
-                }
-
-            }
-            ModelState.AddModelError("", "Failed to Login");
             return View();
         }
 
-        //get
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Product");
+                }
+            }
+            ModelState.AddModelError("", "Failed to login");
+            return View();
+        }
+
         public IActionResult Register()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             if (ModelState.IsValid)
             {
-                Module4.Models.User newuser = new Module4.Models.User();
-                newuser.FirstName=registerViewModel.FirstName;
-                newuser.LastName=registerViewModel.LastName;
-                newuser.UserName = registerViewModel.UserName;
-                newuser.Email = registerViewModel.Email;
-                newuser.PhoneNumber = registerViewModel.PhoneNumber;
+                Module4.Models.User newUser= new Module4.Models.User();
+                newUser.Email = registerViewModel.Email;
+                newUser.FirstName = registerViewModel.FirstName;
+                newUser.LastName = registerViewModel.LastName;
+                newUser.UserName = registerViewModel.UserName;
+                newUser.PhoneNumber= registerViewModel.PhoneNumber;
 
-                //crates new user
-                var result=await _userManager.CreateAsync(newuser,registerViewModel.Password);
+                var result= await _userManager.CreateAsync(newUser, registerViewModel.Password);
                 if(result.Succeeded)
                 {
-                    if(newuser.UserName=="Admin")
+                    if(newUser.UserName=="Admin")
                     {
-                        await _userManager.AddToRoleAsync(newuser, "Admin");
-                        await _userManager.AddToRoleAsync(newuser, "Employee");
+                        await _userManager.AddToRoleAsync(newUser, "Admin");
+                        await _userManager.AddToRoleAsync(newUser, "Employee");
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(newuser, "Employee");
+                        await _userManager.AddToRoleAsync(newUser, "Employee");
                     }
                     return RedirectToAction("Login", "Account");
-
                 }
                 foreach(var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-
+                
             }
             return View(registerViewModel);
         }
-
-         public async Task<IActionResult> LogOut()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-
 
         public IActionResult Index()
         {
